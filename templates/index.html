@@ -1,0 +1,122 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{{ title }}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;1,9..144,300;1,9..144,500&family=Hanken+Grotesk:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#1d1014;--ink:#f6e9da;--soft:#cdb7a6;--flame:#f3b25e;--rose:#c4566f;--paper:#f4e6d3;--pt:#3a1d24;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1d1014}}
+*{box-sizing:inherit}html{scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.6 "Hanken Grotesk",system-ui,sans-serif}
+h1,h2,.serif{font-family:Fraunces,Georgia,serif;font-weight:300;line-height:1.1;margin:0}
+section{padding:10vh 6vw 16vh;max-width:1000px;margin:auto}
+.page{display:none}.page.on{display:block;animation:pg .7s ease both}@keyframes pg{from{opacity:0;transform:translateY(18px)}}
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 5vw calc(12px + env(safe-area-inset-bottom,0px));background:linear-gradient(to top,var(--bg) 60%,transparent)}
+.dots{display:flex;gap:8px}.dots i{width:8px;height:8px;border-radius:50%;background:#cdb7a655}.dots i.on{background:var(--flame);box-shadow:0 0 10px var(--flame)}
+.nav .btn{min-width:96px}.nav .btn[hidden]{visibility:hidden;display:inline-block}
+.hero.on{display:grid}.hero{min-height:100svh;grid-template-columns:1fr;align-items:end;position:relative;max-width:none;padding:0;overflow:hidden}
+.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 25%;filter:brightness(.62) saturate(1.05)}
+.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(to top,var(--bg) 4%,transparent 60%)}
+.hero div{position:relative;z-index:2;padding:0 6vw 10vh;max-width:1000px;margin:auto;width:100%}
+.hero h1{font-size:clamp(3rem,11vw,8rem);font-style:italic}
+.hero p{color:var(--soft);margin:1rem 0 0;max-width:30ch}
+.flame{display:inline-block;width:10px;height:16px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:var(--flame);box-shadow:0 0 18px 6px #f3b25e88;margin-right:10px;animation:fl 2.4s ease-in-out infinite}
+@keyframes fl{50%{transform:scaleY(1.15) translateY(-1px);opacity:.85}}
+h2{font-size:clamp(2rem,6vw,3.6rem);font-style:italic;margin-bottom:.5em}
+.lede{color:var(--soft);max-width:46ch}
+.wall{display:flex;flex-wrap:wrap;gap:22px;justify-content:center;margin-top:48px}
+.pol{background:var(--paper);padding:10px 10px 38px;width:min(300px,44%);box-shadow:0 14px 30px #0008;transform:rotate(var(--r));transition:transform .3s}
+.pol:nth-child(odd){margin-top:26px}.pol img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover}
+.pol span{display:block;color:var(--pt);font:italic 400 .95rem Fraunces,serif;margin-top:10px;text-align:center}
+.pol.w{width:min(420px,92%)}.pol.w img{aspect-ratio:16/9}
+.pol:hover{transform:rotate(0) scale(1.03)}
+.puz{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;width:min(420px,100%);aspect-ratio:1080/1264;margin:28px 0 14px;background:#000}
+.puz button{border:0;padding:0;cursor:pointer;background-size:300% 300%;background-image:url({{ url_for('static', filename='img/room.jpg') }});outline-offset:-3px;transition:transform .25s}
+.puz button.sel{outline:3px solid var(--flame);transform:scale(.95)}
+.puz.done button{outline:0;transition:none}.puz.done{gap:0}
+.msg{min-height:1.6em;color:var(--flame)}
+.btn{background:var(--flame);color:#2a1410;border:0;border-radius:999px;padding:.7em 1.5em;font:600 1rem "Hanken Grotesk",sans-serif;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--soft)}
+:focus-visible{outline:3px solid var(--flame);outline-offset:3px}
+.env{position:relative;width:min(420px,100%);margin:30px 0}
+.env .flap{background:#a6753f;border-radius:6px;height:230px;display:grid;place-items:center;cursor:pointer;border:0;width:100%;color:#fff4e0;font:italic 1.5rem Fraunces,serif;box-shadow:0 14px 30px #0008}
+.letter{background:var(--paper);color:var(--pt);padding:28px 26px;border-radius:4px;max-width:520px;box-shadow:0 14px 30px #0008;display:none}
+.letter.open{display:block;animation:up .7s ease both}@keyframes up{from{opacity:0;transform:translateY(24px)}}
+.letter p{margin:0 0 1em;font-family:Fraunces,serif;font-size:1.08rem}
+.voice{display:flex;align-items:center;gap:14px;background:#fff8;border-radius:999px;padding:8px 18px 8px 8px;margin-top:20px}
+.voice button{width:44px;height:44px;border-radius:50%;border:0;background:var(--rose);color:#fff;font-size:1rem;cursor:pointer}
+.voice progress{flex:1;height:6px;accent-color:var(--rose)}
+.pro{list-style:none;padding:0;margin:28px 0 0;max-width:560px}
+.pro li{margin:10px 0}.pro label{display:flex;gap:14px;align-items:flex-start;padding:14px 18px;border:1px solid #cdb7a655;border-radius:10px;cursor:pointer}
+.pro input{accent-color:var(--rose);width:22px;height:22px;margin-top:2px;flex:none}
+.pro input:checked+span{color:var(--flame)}
+footer.on{display:grid}footer{text-align:center;color:var(--soft);padding:10vh 6vw}
+footer .serif{font-size:clamp(1.6rem,5vw,2.4rem);font-style:italic;color:var(--ink)}
+.final{display:none;margin-top:20px;color:var(--flame);font-family:Fraunces,serif;font-style:italic;font-size:1.3rem}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;scroll-behavior:auto!important}}
+.mute{position:fixed;top:calc(env(safe-area-inset-top,0px) + 12px);right:4vw;z-index:30;width:44px;height:44px;border-radius:50%;border:1px solid var(--soft);background:#1d1014cc;color:var(--ink);font-size:1.2rem;cursor:pointer}.mute.off{opacity:.55;text-decoration:line-through}</style></head><body>
+<header class="hero page on" id="top"><img src="{{ url_for('static', filename='img/hero.jpg') }}" alt="The two of us standing close in candlelight, her hand on his chest">
+<div><h1>{{ title_line1 }}<br>{{ title_line2 }}</h1><p><span class="flame"></span>Scroll down. This one is just for us.</p></div></header>
+
+<section class="page"><h2>From me to you.</h2><p class="lede">Candles, flowers, a cake and the two of us. These are the moments I keep coming back to.</p>
+<div class="wall">
+{% for p in photos %}<figure class="pol{{ ' w' if p.wide else '' }}" style="--r:{{ p.tilt }}deg;margin:0"><img src="{{ url_for('static', filename='img/' ~ p.file ~ '.jpg') }}" alt="{{ p.alt }}"><span>{{ p.caption }}</span></figure>
+{% endfor %}
+</div></section>
+
+<section class="page"><h2>This photo fell apart.</h2><p class="lede">Tap one piece, then another to swap them. Put us back together.</p>
+<div class="puz" id="puz" role="group" aria-label="Photo puzzle"></div>
+<p class="msg" id="pm" aria-live="polite"></p><button class="btn ghost" id="shuf">Shuffle again</button></section>
+
+<section class="page"><h2>A letter, and my voice.</h2><p class="lede">Open it. Then press play.</p>
+<div class="env" id="env"><button class="flap" id="open">Tap to open</button></div>
+<article class="letter" id="letter">
+{% for line in letter %}<p>{{ line }}</p>
+{% endfor %}<p style="text-align:right;margin:0"><em>{{ signoff }}</em></p>
+<div class="voice"><button id="pl" aria-label="Play voice note">▶</button><progress id="pg" value="0" max="1"></progress><span id="tm" style="font-size:.85rem">0:00</span></div>
+<audio id="au" src="{{ url_for('static', filename='voice.ogg') }}" preload="metadata"></audio></article></section>
+
+<section class="page"><h2>Tick the ones you'll hold me to.</h2>
+<ul class="pro" id="pro"></ul><p class="final" id="fin">Signed, sealed, and kept.</p></section>
+
+<footer class="page" style="min-height:100svh;place-items:center;align-content:center"><img src="{{ url_for('static', filename='img/kiss.jpg') }}" alt="" style="width:min(520px,90%);border-radius:6px;margin-bottom:28px;opacity:.9"><p class="serif">Still you. Always you.</p><p>Made with love, for the two of us, My Gelha</p></footer>
+
+<audio id="bg" loop preload="auto" src="{{ url_for('static', filename='song.mp3') }}"></audio><button class="mute" id="mu" aria-label="Mute music">♪</button>
+<nav class="nav" aria-label="Pages"><button class="btn ghost" id="back" hidden>Back</button><div class="dots" id="dots" aria-hidden="true"></div><button class="btn" id="next">Begin</button></nav>
+<script>
+const $=s=>document.querySelector(s);
+// puzzle
+const N=9,pz=$('#puz');let order=[],sel=null;
+function draw(){pz.innerHTML='';order.forEach((p,i)=>{const b=document.createElement('button');
+b.style.backgroundPosition=(p%3)*50+'% '+Math.floor(p/3)*50+'%';b.setAttribute('aria-label','Piece '+(i+1));
+if(sel===i)b.className='sel';b.onclick=()=>pick(i);pz.appendChild(b)})}
+function shuffle(){do{order=[...Array(N).keys()].sort(()=>Math.random()-.5)}while(order.every((v,i)=>v===i));sel=null;pz.classList.remove('done');$('#pm').textContent='';draw()}
+function pick(i){if(pz.classList.contains('done'))return;if(sel===null){sel=i}else{[order[sel],order[i]]=[order[i],order[sel]];sel=null}
+draw();if(order.every((v,i)=>v===i)){pz.classList.add('done');pz.querySelectorAll('button').forEach(b=>b.disabled=true);$('#pm').textContent='There we are. Back together.'}}
+$('#shuf').onclick=shuffle;shuffle();
+// background music: browsers only allow sound after a first tap, so it starts on the first tap or key press
+const bg=$('#bg');bg.volume=.5;
+const startBg=()=>bg.play().catch(()=>{});
+addEventListener('pointerdown',startBg,{once:true});addEventListener('keydown',startBg,{once:true});
+$('#mu').onclick=()=>{bg.muted=!bg.muted;$('#mu').classList.toggle('off',bg.muted);$('#mu').setAttribute('aria-label',bg.muted?'Unmute music':'Mute music');if(!bg.muted)startBg()};
+// letter
+$('#open').onclick=()=>{$('#env').style.display='none';$('#letter').classList.add('open')};
+const au=$('#au'),pl=$('#pl'),fmt=t=>Math.floor(t/60)+':'+String(Math.floor(t%60)).padStart(2,'0');
+pl.onclick=()=>au.paused?au.play():au.pause();
+au.onplay=()=>{pl.textContent='❚❚';bg.volume=.1};au.onpause=au.onended=()=>{pl.textContent='▶';bg.volume=.5};
+au.ontimeupdate=()=>{$('#pg').value=au.currentTime/(au.duration||1);$('#tm').textContent=fmt(au.currentTime)};
+au.onloadedmetadata=()=>$('#tm').textContent=fmt(au.duration);
+// promises
+const P={{ promises|tojson }};
+$('#pro').innerHTML=P.map((t,i)=>`<li><label><input type="checkbox"><span>${t}</span></label></li>`).join('');
+$('#pro').onchange=()=>{$('#fin').style.display=[...document.querySelectorAll('.pro input')].every(c=>c.checked)?'block':'none'};
+
+const pages=[...document.querySelectorAll('.page')];let cur=0;
+const dots=$('#dots');dots.innerHTML=pages.map(()=>'<i></i>').join('');
+function go(n){cur=Math.max(0,Math.min(pages.length-1,n));pages.forEach((p,i)=>p.classList.toggle('on',i===cur));
+[...dots.children].forEach((d,i)=>d.classList.toggle('on',i===cur));
+$('#back').hidden=cur===0;$('#next').textContent=cur===pages.length-1?'Start again':(cur===0?'Begin':'Next');
+if(au&&!au.paused&&cur!==3)au.pause();scrollTo(0,0)}
+$('#next').onclick=()=>go(cur===pages.length-1?0:cur+1);$('#back').onclick=()=>go(cur-1);
+addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(cur+1);if(e.key==='ArrowLeft')go(cur-1)});go(0);
+</script></body></html>
